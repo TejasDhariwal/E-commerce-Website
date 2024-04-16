@@ -1,0 +1,101 @@
+{% extends '01_base.html' %}
+
+{% block title %}T-Mart | Seller{% endblock title %}
+
+{% block css %}
+.seller-page{
+    margin: 15vh 5vw 10vh 5vw;
+    }
+    .intro{
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+    .intro h3{
+        width: 40vw;
+    }
+    .advantages{margin: 2vh 0 10vh 0;}
+    .advantages table tr th{
+        border-left: 1px solid rgb(39, 190, 255);
+        border-right: 1px solid rgb(39, 190, 255);
+    }
+    
+    .steps{margin-top: 10vh;}
+    .steps table tr td img{
+        width: 150px;
+        height: 150px;
+        margin: 1vh 1vw;
+    }
+    .steps table tr td a{
+        text-decoration: none;
+        color: darkblue;
+    }
+    .steps table tr td a:hover{border-bottom: 1px solid darkblue;}
+    
+{% endblock css %}
+
+{% block body %}
+    {% load static %}
+    <div class="seller-page">
+        <!-- intro to t-mart seller -->
+        <div class="intro">
+            <h1 class="info">Sell Online with T-mart</h1>
+            <img src="{% static 'seller\img5.png' %}" alt="intro-img">
+            
+        </div>
+
+        <!-- advantages of becoming a seller on t-mart -->
+        <div class="advantages">
+            <table cellspacing="0">
+                <tr>
+                    <th><img src="{% static "seller/icons/img1.svg" %}" alt=""></th>
+                    <th><img src="{% static "seller/icons/img2.svg" %}" alt=""></th>
+                    <th><img src="{% static "seller/icons/img3.svg" %}" alt=""></th>
+                    <th><img src="{% static "seller/icons/img4.svg" %}" alt=""></th>
+                    <th><img src="{% static "seller/icons/img5.svg" %}" alt=""></th>
+                </tr>
+                <tr>
+                    <th>30 crore+ T-mart customers</th>
+                    <th>7 days secure and regular payment</th>
+                    <th>Low cost of doing business</th>
+                    <th>One click seller support</th>
+                    <th>Access to the Big million days and more</th>
+                </tr>
+            </table>
+        </div>
+        <hr>
+
+        <!-- steps to become a t-mart seller -->
+        <div class="steps">
+            <table align="center">
+                <h1>How can you sell on T-Mart ?</h1>
+
+                <tr>
+                    <td><img src="{% static "seller/how_to_sell/img1.jpg" %}" alt=""></td>
+                    <td>
+                        <b>STEP 1: Register your account</b>
+                        <p><a href="{% url "sellerLogin" %}">Register on T-Mart</a> with PAN details and active bank account.</p>
+                    </td>
+                    <td><img src="{% static "seller/how_to_sell/img2.png" %}" alt=""></td>
+                    <td>
+                        <b>STEP 2: Choose storage and shipping</b>
+                        <p>Choose storage, delivery and packaging options.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src="{% static "seller/how_to_sell/img3.jpg" %}" alt=""></td>
+                    <td>
+                        <b>STEP 3: List your products</b>
+                        <p>List you products by providing product and brand details</p>
+                    </td>
+                    <td><img src="{% static "seller/how_to_sell/img4.png" %}" alt=""></td>
+                    <td>
+                        <b>STEP 4: Complete orders & get paid</b>
+                        <p>Deliver orders to customers on time and get paid within 7 days of delivery.</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+{% endblock body %}

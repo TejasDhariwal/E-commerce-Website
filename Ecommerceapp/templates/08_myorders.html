@@ -1,0 +1,255 @@
+{% extends '01_base.html' %}
+
+{% block title %}T-Mart | My Orders{% endblock title %}
+
+{% block css %}
+
+    body{
+        background-color: rgb(246, 244, 244);
+        font-family: 'Ubuntu', sans-serif;
+    }
+    .myorders{
+        margin: 5vh 2vw;
+        margin-top: 18vh;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    /* My account nav buttons styling */
+    .navs{
+        box-shadow: 3px 3px 3px 3px rgb(230, 228, 228);
+        width: 25vw;
+        height: 65vh;
+        padding: 10px;
+        background-color: white;
+        text-align: center;
+        overflow-y: auto;
+        scrollbar-width: 0;
+    }
+
+    .navs::-webkit-scrollbar{
+        color: black;
+        width: 0;
+    }
+    .myorders a{
+        text-decoration: none;
+        color: black;
+        background-color: white;
+    }
+    .navs a, h4{
+        width: 100%;
+        height: 6vh;
+        margin: 1vh auto;
+        background-color: white;
+        border: 0px;
+        font-family: 'Poppins', sans-serif;
+        font-size: large;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }
+    .navs h4{
+        color: grey;
+        border-bottom: 1px solid grey;
+    }
+    .myorders a:hover{
+        background-color: rgb(244, 244, 251);
+        color: grey;
+        cursor: pointer;
+    }
+
+    .content{
+        width: 60vw;
+        height: 65vh;
+        box-shadow: 3px 3px 3px 3px rgb(230, 228, 228);
+        padding: 5px;
+        background-color: white;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 2vh 2vw;
+        font-family: 'Poppins', sans-serif;
+    }
+    .content::-webkit-scrollbar{
+        color: black;
+    }
+
+    /* Styling the order details section */
+    .content h2{
+        border-top: 1px solid grey;
+        padding-top: 5vh;
+        margin-top: 5vh;
+    }
+
+    .content .order{
+        width: 55vw;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 5vh 2vw;
+    }
+    .order img{
+        width: 25vw;
+        height: 40vh;
+        box-shadow: 2px 2px gray, -2px -2px gray;
+        border-radius: 5px;
+        padding: 5px;
+    }
+    .order .order-info{
+        margin-left: 1vw;
+    }
+
+
+    /* Styling the no orders message box. */
+    .content .no-orders{
+        margin: 25vh 10vw;
+        box-shadow: 5px 5px gray, -5px 5px gray;
+        border-radius: 5px;
+        padding: 2vh 2vw;
+        
+    }
+
+
+{% endblock css %}
+
+{% block body %}
+<div class="myorders">
+    
+    <div class="navs">
+        <h4 class="nav-head">My Orders -></h4>
+
+        <a href="#all-orders" class="all-orders">All Orders</a>
+        <a href="#orders-delivered" class="orders-delivered">Delivered Orders</a>
+        <a href="#orders-not-delivered" class="orders-not-delivered">Not Delivered Orders</a>
+        <a href="#orders-returned" class="orders-returned">Orders Returned</a>
+    </div>
+    
+    <div class="content">
+        {% if not are_orders_placed %}
+            <!-- message that the user has not placed any orders yet. -->
+            <h2 class="no-orders">You haven't placed any orders yet.</h2>
+        {% else %}
+            
+            <!-- ALL ORDERS PLACED BY THE USER -->
+
+            <h2 id="all-orders" class="all-orders">All Orders</h2>
+            {% for order in all_orders %}
+                <div class="order">
+                    <!-- image of the order placed -->
+                    <img src="{{ order.product_img }}" alt="product_img" class="prod-img">
+                    
+                    <!-- other info of the order -->
+                    <div class="order-info">
+                        <!-- name of the product -->
+                        <h4 class="prod-name">{{ order.product_name }}</h4>
+                        <!-- quantity of product -->
+                        <h4>Quantity :- {{ order.product_quantity}}</h4>
+                        <!-- price of product -->
+                        <h4 class="prod-price">Price :- {{ order.product_gross_price }} Rs</h4>
+                        <!-- delivery address -->
+                        <h4 class="prod-del-add">Delivered to :- {{order.product_delivered_address}}</h4>
+                    </div>
+                </div>
+
+            {% endfor %}
+            
+            <!-- ORDERS THAT ARE RECIEVED BY THE USER-->
+
+            <h2 id="orders-delivered">Delivered Orders</h2>
+            {% if orders_delivered|length == 0 %}
+                <!-- message that the user hasn't recieved any orders yet from t-mart -->
+                <h2 class="no-orders">You have no orders that are delivered yet.</h2>
+            {% else %}
+                <div class="order-delivered">
+                    {% for order in orders_delivered %}
+                        <div class="order">
+                            <!-- order's image -->
+                            <img src="{{ order.product_img }}" alt="product_img"    class="prod-img">
+
+                            <!-- other info of order -->
+                            <div class="order-info">
+                                <!-- product's name -->
+                                <h4 class="prod-name">{{ order.product_name }}</h4>
+
+                                <!-- quantity of product -->
+                                <h4>Quantity :- {{ order.product_quantity}}</h4>
+
+                                <!-- product's price -->
+                                <h4 class="prod-price">Price :- {{ order.product_gross_price }} Rs</h4>
+
+                                <!-- product's delivery address -->
+                                <h4 class="prod-del-add">Delivered to :- {{order.product_delivered_address}}</h4>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- ORDERS THAT ARE PLACED BY THE USER BUT AREN'T DELIVERED YET -->
+
+            <h2 id="orders-not-delivered">Orders Not Delivered</h2>
+            {% if orders_not_delivered|length == 0 %}
+                <!-- message that user has no orders that are delivered yet. -->
+                <h2 class="no-orders">You have no orders that aren't delivered yet.</h2>
+            {% else %}
+                <div class="order-delivered">
+                    {% for order in orders_not_delivered %}
+                        <div class="order">
+                            <!-- order's image -->
+                            <img src="{{ order.product_img }}" alt="product_img" class="prod-img">
+
+                            <!-- order's other info -->
+                            <div class="order-info">
+                                <!-- product's name -->
+                                <h4 class="prod-name">{{ order.product_name }}</h4>
+
+                                <!-- quantity of product -->
+                                <h4>Quantity :- {{ order.product_quantity}}</h4>
+
+                                <!-- product's price -->
+                                <h4 class="prod-price">Price :- {{ order.product_gross_price }} Rs</h4>
+
+                                <!-- product's delivery address -->
+                                <h4 class="prod-del-add">Delivered to :- {{order.product_delivered_address}}</h4>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- ORDERS THAT ARE RETURNED BY THE USER -->
+            <h2 id="orders-returned">Orders Returned</h2>
+            {% if orders_returned|length == 0 %}
+                <!-- message that the user has no orders returned yet. -->
+                <h2 class="no-orders">You have no orders that are returned yet.</h2>
+            {% else %}
+                <div class="order-delivered">
+                    {% for order in orders_returned %}
+                        <div class="order">
+                            <!-- order's image -->
+                            <img src="{{ order.product_img }}" alt="product_img" class="prod-img">
+
+                            <!-- other info of the order -->
+                            <div class="order-info">
+                                <!-- product's name -->
+                                <h4 class="prod-name">{{ order.product_name }}</h4>
+
+                                <!-- quantity of product -->
+                                <h4>Quantity :- {{ order.product_quantity}}</h4>
+                                
+                                <!-- product's price -->
+                                <h4 class="prod-price">Price :- {{ order.product_gross_price }} Rs</h4>
+                                
+                                <!-- product's delivery address -->
+                                <h4 class="prod-del-add">Delivered to :- {{order.product_delivered_address}}</h4>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        {% endif %}
+    </div>
+</div>
+
+{% endblock body %}

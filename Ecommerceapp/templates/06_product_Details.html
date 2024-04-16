@@ -1,0 +1,82 @@
+{% extends '01_base.html' %}
+
+{% block title %}T - Mart{% endblock title %}
+
+{% block css %}
+    .product_detail{
+        margin: 15vh 2vw 10vh 2vw;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        overflow: hidden;
+    }
+    .product_img{
+        width: 30vw;
+        height: 70vh;
+        margin: 1vh 3vw;
+        border-radius: 5px;
+    }
+    .product_img:hover{
+        border-right: 0px;
+        box-shadow: 5px 5px 5px 5px rgb(72, 72, 72);
+        transition: 1s ease;
+    }
+    .product_name{
+        width: 100%;
+        padding: 2vh;
+        border-bottom: 1px solid gray;
+    }
+    .product_pub_date{
+        padding-bottom: 2vh;
+        border-bottom: 1px solid gray;
+    }
+    .order_btns{
+        margin-top: 5vh;
+        display: flex;
+        align-items: center;
+    }
+    .product_btn{
+        width: 10vw;
+        height: 5vh;
+        border: 2px solid black;
+        border-radius: 5px;
+        background-color: white;
+        cursor: pointer;
+    }
+    .product_btn:hover{
+        font-weight: bolder;
+        transition: 0.5s ease-out;
+    }
+    .order_btn{
+        margin-left: 2vw;
+    }
+{% endblock css %}
+
+{% block body %}
+    <div class="product_detail">
+        <img src="{{product.product_image.url}}" alt="img" class="product_img">
+        <div class="product_info">
+            <h2 class="product_name">{{product.product_name}}</h2>
+            <p class="product_desc">{{product.product_desc}}</p>
+            <p class="product_pub_date">Date Published :- {{product.product_pub_date}}</p>
+
+            <div class="product_price_info">
+                <p class="product_price">Price :- {{product.product_price}} Rs</p>
+                {% if product.product_delivery == 'Free delivery' %}
+                    <p class="product_delivery">Product Delivery :- {{product.product_delivery}}</p>
+                {% elif product.product_delivery == 'Paid delivery'%}
+                    <p class="product_delivery">Product delivery price :- {{product.product_delivery_price}}</p>
+                {% endif %}
+            </div>
+
+            <div class="order_btns">
+                <form action="{% url 'add_to_cart' product.product_name product.product_desc %}" class="cart_form" method="post">{% csrf_token %}
+                    <button class="cart_btn product_btn">Add to Cart</button>
+                </form>
+                <form action="{% url 'purchase' product.product_desc 'not_in_cart' %}" class="order_form" method="post">{% csrf_token %}
+                    <button class="order_btn product_btn">Order Now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

@@ -1,0 +1,148 @@
+<!-- Basic structure of the website that will be used in each website. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <style>
+        /* Designing the basic things of the website that will remain the same in each template. */
+
+        @import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@500&family=Itim&family=Josefin+Sans:ital@1&display=swap');
+
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap');
+
+        /* page change animation */
+        @keyframes slide_page {
+            from{
+                transform: translateX(100vw);
+            }
+            to{
+                transform: translateX(0vw);
+            }
+        }
+
+        /* body */
+        
+        body {
+            
+            margin: 0;
+            padding: 0;
+            /* font-family: 'Golos Text', sans-serif; */
+            font-family: 'Ubuntu', sans-serif;
+            font-size: large;
+            
+        }
+        button{
+            font-family: 'Golos Text', sans-serif;
+        }
+        .img:hover{
+            transform: scale(1.1);
+            transition: 0.1s ease-out;
+        }
+
+        /* navbar */
+        .navbar {
+            position: fixed;
+            width: 100%;
+            height: 10vh;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 2px 2px 2px 2px gray;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-search {
+            width: 8vw;
+            height: 4vh;
+            border: 2px solid rgb(31, 30, 30);
+            border-radius: 5px;
+            padding: 2px 2px 2px 2px;
+        }
+
+        .navbar a{
+            text-decoration: none;
+            color: black;
+        }
+        .navbar a:hover{
+            text-decoration: underline;
+        }
+
+        .footer{
+            bottom: 0;
+            margin-top: 4vh;
+            border-top: 1px solid gray;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        /* styling the message section */
+        .message{
+            width: 100%;
+            height: 8vh;
+            background-color: gray;
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            margin-top: 12vh;
+            padding: 1vh 1vw;
+        }
+
+       {% block css %}{% endblock css %}
+    </style>
+
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+
+        <a href="/"><h2 class="nav-heading">T - Mart</h2></a>
+        
+        <input type="text" name="Search box" id="nav-search" , class="nav-search" placeholder="Search box">
+        
+        {% if user_login_successful %}
+            <a href="{% url 'myaccount' %}"><h4 class="my-account">My account</h4></a>
+        
+        {% else %}
+            <a href="{% url 'userLogin' %}"><h4 class="log-in">Log In</h4></a>
+        {% endif %}
+        
+        {% if seller_login_successful %}
+            <a href="{% url 'sellerAccount' %}"><h4 class="seller">Seller Account</h4></a>
+        {% else %}
+            <a href="{% url 'sellerIntro' %}"><h4 class="seller">Become a Seller</h4></a>
+        {% endif %}
+            
+        <a href="{% url 'cart' %}"><i class="fa-solid fa-2x fa-cart-shopping"></i></a>
+    </div>
+
+    <!-- Displaying messages if they are present. -->
+    {% if messages %}
+        {% for message in messages %}
+            <h2 class="message">{{ message }}</h2>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Further html that will look different in each template -->
+    {% block body %}{% endblock body %}
+
+    <!-- Footer -->
+    <div class="footer">
+        <h3 class="footer_text">T - Mart Copyright <i class="fa-solid fa-copyright"></i> 2023 - 2024. All Rights Reserved.</h3>
+    </div>
+
+    <script src="https://kit.fontawesome.com/3c467e2d81.js" crossorigin="anonymous"></script>
+   
+</body>
+</html>

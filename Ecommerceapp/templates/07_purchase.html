@@ -1,0 +1,387 @@
+{% extends '01_base.html' %}
+
+{% comment %} On this page user will do the final transaction to purchase the product {% endcomment %}
+
+{% block title %}T - Mart | Purchase Product{% endblock title %}
+
+{% block css %}
+
+    /* designing the purchse product div  */
+    .purchase-product{
+        margin: 15vh 2vw 5vh 2vw;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+    .purchase-product select{
+        width: 10vw;
+        height: 5vh;
+        border-radius: 5px;
+        border: 1px solid grey;
+        padding: 5px 10px;
+        font-size: medium;
+        font-family: 'Poppins', sans-serif;
+    }
+
+
+    /* purchase-step div  */
+    .purchase-steps{
+        width: 60vw;
+        height: 70vh;
+        text-align: left;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-color: white;
+    }
+
+    .purchase-steps::-webkit-scrollbar{opacity: 0;}
+
+    .purchase-step{
+        width: 98%;
+        height: 20vh;
+        box-shadow: 2px 2px 2px 2px gray;
+        border-radius: 2px;
+        margin-left: 5px;
+        margin: 5vh 0;
+        padding: 5px;
+        overflow: hidden;
+    }
+    .purchase-step h3{
+        border-bottom: 1px solid grey;
+        padding: 5px;
+    }
+    .purchase-step input[type="text"]{
+        margin-top: 7px;
+        width: 10vw;
+        height: 4vh;
+        border-radius: 5px;
+        border: 1px solid grey;
+        padding: 5px 10px;
+        font-size: medium;
+        font-family: 'Poppins', sans-serif;
+    }
+    .purchase-step input[type="text"]:focus{
+        border: 1px solid black;
+    }
+
+    /* user login section styling */
+
+    .purchase-step1{height: 45vh;}
+
+    .purchase-step1 .name, .phone{
+        width: 50vh;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .purchase-step1 .logout a{
+        text-decoration: none;
+        margin-left: 2vw;
+    }
+    .purchase-step1 .logout a:hover{
+        border-bottom: 1px solid black;
+        padding-bottom: 1px;
+    }
+
+    .purchase-step1 .login-info{
+        margin: 12vh auto;
+        text-align: center;
+    }
+    .purchase-step1 .login-info h4{
+        margin-bottom: 2vh;
+        width: 30vw;
+        padding: 5px;
+        border: 1px solid grey;
+        border-radius: 5px;
+    }
+
+    .purchase-step1 .login-info h4 a{
+        text-decoration: none;
+        color: rgb(6, 6, 157);
+    }
+    .purchase-step1 .login-info h4 a:hover{text-decoration: underline;}
+
+    /* delivery address section styling  */
+    .purchase-step2 .add{
+        width: 40vw;
+        display: flex;
+        justify-content: space-around;
+    }
+    .purchase-step2 .add .user-add-input{width: 30vw;}
+
+    /* order summary section styling  */
+    .purchase-step3{height: 60vh;}
+
+    .purchase-step3 .p{
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 1vh 1vw;
+    }
+
+    .purchase-step3 .p .prod-img{
+        width: 25vw;
+        height: 45vh;
+        padding-right: 10px;
+        border-right: 1px solid grey;
+    }
+    .purchase-step3 .p .prod-img:hover{
+        transform: scale(1.1);
+        transition: 0.1s ease-out;
+    }
+
+    .purchase-step3 .p .product-info{
+        height: 45vh;
+        width: 25vw;
+        margin-left: 5px;
+    }
+
+    .purchase-step3 .p .product-info .prod-qn{
+        width: 20vw;
+        height: 7vh;
+        display: flex;
+        justify-content: space-between;
+    }
+    .purchase-step3 .p .product-info .prod-qn select{margin-top: 2vh;}
+
+    /* payment method section styling */
+    .purchase-step4{height: 25vh;}
+
+    .purchase-step4 select{width: 15vw;}
+
+    .purchase-step4 button{
+        display: block;
+        width: 12vw;
+        height: 5vh;
+        border: 1px solid grey;
+        border-radius: 5px;
+        background-color: white;
+        margin-top: 3vh;
+    }
+    .purchase-step4 button:hover{
+        font-weight: bolder;
+        border-color: black;
+    }
+
+    /* product price details styling  */
+    .price-details{
+        width: 25vw;
+        height: 40vh;
+        border: 1px solid grey;
+    }
+
+    /* price detail section styling */
+    .price-details{
+        box-shadow: 2px 2px 2px 2px grey;
+        border-radius: 10px;
+        padding: 1vh 1vw;
+    }
+    .price-details h3{
+        border-bottom: 1px solid grey;
+        padding-bottom: 5px;
+    }
+    .price-details .net-amount{
+        margin-top: 2vh;
+        border-top: 1px solid grey;
+        padding-top: 1px;
+    }
+    .price-details .info{
+        width: 100%;
+        height: 6vh;
+        display: flex;
+        justify-content: space-between;
+} 
+
+{% endblock css %}
+
+{% block body %}
+
+<div class="purchase-product">
+
+    <div class="purchase-steps">
+        <form action="{% url 'purchase_product' product.product_desc net_product_amount  %}" class="purchase-prod-form" method="post">{% csrf_token %}
+            <!-- User Login -->
+            <div class="purchase-step1 purchase-step">
+            <h3 class="login-heading">1. User Login</h3>
+
+            {% if has_user_logged_in_made_profile %}
+                <!-- user name input -->
+                <div class="name">
+                    <h4 class="user-name">Name</h4>
+                    <input type="text" name="user-name-input" value="{{ user.user_name }}" class="user-name-input">
+                </div>
+
+                <!-- user phone input -->
+                <div class="phone">
+                    <h4 class="user-phone">Phone</h4>
+                    <input type="text" name="user-phone-input" value="{{ user.user_mob }}" class="user-phone-input">
+                </div>
+
+                <!-- logout button -->
+                <h4 class="logout"><a href="{% url 'userLogout' %}">Logout & Sign in to another account.</a></h4>
+
+            {% else %}
+                
+                <div class="login-info">
+                    <!-- login done but profile not made -->
+                    {% if user_login_successful and not has_user_logged_in_made_profile %}
+                    
+                    <h4>Kindly make your <a href="{% url 'createUserProfile' %}">T-Mart user profile</a> first in order to proceed.</h4>
+                    
+                    <!-- login and profile both not done -->
+                    {% else %}
+
+                    <h4>Kindly first <a href="{% url 'userLogin' %}" class="login">login</a> and make user profile.</h4>
+                    
+                    {% endif %}
+                
+                </div>
+            {% endif %}
+
+            </div>
+        
+            <!-- Delivery Address -->
+            <div class="purchase-step2 purchase-step">
+            <h3 class="add-heading">2. Delivery Address</h3>
+
+            <!-- user delivery address input -->
+            <div class="add">
+                <h4 class="user-add">Delivery to</h4>
+                <input type="text" name="user-add-input" value="{{ user.user_add }}" class="user-add-input">
+            </div>
+            </div>
+        
+            <!-- Order Summary -->
+            <div class="purchase-step3 purchase-step">
+            <h3 class="order-summary-heading">3. Order Summary</h3>
+
+            <div class="p">
+                <!-- Product image -->
+                <img src="{{ product.product_image.url }}" alt="product_img" class="prod-img">
+    
+                <!-- Product Info -->
+                <div class="product-info">
+                    <!-- Product name -->
+                    <h4 class="prod-name">{{ product.product_name }}</h4>
+                    
+                    <!-- Product price -->
+                    <h4 class="prod-price">Price : {{ product.product_price }}</h4>
+        
+                    <!-- Product quantity -->
+                    <div class="prod-qn">
+                        <h4 class="prod-quantity">Quantity : </h4>
+                        <select name="prod-quantity" class="prod-quantity">
+                            <option value="1" selected class="1">1</option>
+                            <option value="2"  class="2">2</option>
+                            <option value="3"  class="3">3</option>
+                            <option value="4"  class="4">4</option>
+                            <option value="5"  class="5">5</option>
+                            <option value="6"  class="6">6</option>
+                            <option value="7"  class="7">7</option>
+                            <option value="8"  class="8">8</option>
+                            <option value="9"  class="9">9</option>
+                            <option value="10"  class="10">10</option>
+                        </select>
+                    </div>
+        
+                    <!-- Product delivery date and price -->
+                    {% if product.product_delivery_price == 0 %}
+                        <h4 class="delivery-date">Delivery by {{tmart_address}} | Free</h4>
+                    {% else %}    
+                        <h4 class="delivery-date">Delivery by {{tmart_address}} | {{ product.product_delivery_price }}</h4>
+                    {% endif %}
+                </div>
+            </div>
+            </div>
+        
+            <!-- Payment Options -->
+            <div class="purchase-step4 purchase-step">
+            <h3 class="payment-opt-heading">4. Payment Options</h3>
+
+            <!-- payment options input -->
+
+            <!-- if c_o_d is in database then we will show it as the default value in the profile  -->
+            {% if user.payment_method == "c_o_d" %}
+            <select name="payment-mode-input" class="payment-mode-input">
+                <option value="c_o_d" selected>c_o_d</option>
+                <option value="credit / debit card">credit / debit card</option>
+                <option value="UPI">UPI</option>
+                <option value="T-Mart Wallet">T-Mart Wallet</option>
+            </select>
+            
+            <!-- if credit_or_debit_card is in database then we will show it as the default value in the profile  -->
+            {% elif user.payment_method == "credit / debit card" %}
+            <select name="payment-mode-input" class="payment-mode-input">
+                <option value="c_o_d" >c_o_d</option>
+                <option value="credit / debit card" selected>credit / debit card</option>
+                <option value="UPI">UPI</option>
+                <option value="T-Mart Wallet">T-Mart Wallet</option>
+            </select>
+
+            <!-- if upi is in database then we will show it as the default value in the profile  -->
+            {% elif user.payment_method == "UPI" %}
+            <select name="payment-mode-input" class="payment-mode-input">
+                <option value="c_o_d" >c_o_d</option>
+                <option value="credit / debit card">credit / debit card</option>
+                <option value="UPI" selected>UPI</option>
+                <option value="T-Mart Wallet">T-Mart Wallet</option>
+            </select>
+
+            <!-- if wallet is in database then we will show it as the default value in the profile  -->
+            {% elif user.payment_method == "T-Mart Wallet" %}
+            <select name="payment-mode-input" class="payment-mode-input">
+                <option value="c_o_d" >c_o_d</option>
+                <option value="credit / debit card">credit / debit card</option>
+                <option value="UPI">UPI</option>
+                <option value="T-Mart Wallet default" selected>T-Mart Wallet</option>
+            </select>
+            
+            {% else %}
+            <select name="payment-mode-input" class="payment-mode-input">
+                <option value="c_o_d" selected>c_o_d</option>
+                <option value="credit / debit card">credit / debit card</option>
+                <option value="UPI">UPI</option>
+                <option value="T-Mart Wallet">T-Mart Wallet</option>
+            </select>
+            
+            {% endif %}
+
+            <!-- purchase product button -->
+            <button class="purchase-prod-btn">Purchase Product</button>
+            
+            </div>
+            
+        </form>
+    </div>
+
+    <div class="price-details">
+        <h3 class="heading">Price Details</h3>
+
+        <!-- price of the product -->
+        <div class="prod-price info">
+            <h4>Price (1 Item)</h4><h4>{{product.product_price}} Rs</h4>
+        </div>
+        
+        <!-- delivery price -->
+        <div class="del-price info">
+            <h4>Delivery Charges</h4>
+            <h4>{{product.product_delivery_price}} Rs</h4>
+        </div>
+        
+        <!-- payment handling fee -->
+        <div class="del-price info">
+            <h4>Payment Handling Fee</h4>
+            <h4>10 Rs</h4>
+        </div>
+
+        <!-- Total payable amount -->
+        <div class="net-amount info">
+            <h4>Amount Payable</h4>
+            <h4>{{net_product_amount}} Rs</h4>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock body %}

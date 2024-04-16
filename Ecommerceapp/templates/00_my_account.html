@@ -1,0 +1,342 @@
+{% extends '01_base.html' %}
+
+{% block title %}T - Mart | My Account{% endblock title %}
+
+{% block css %}
+
+    /* My account styling */
+
+    body{
+        background-color: rgb(246, 244, 244);
+        
+    }
+    .myaccount{
+        animation: slide_page 0.5s;
+        margin: 5vh 2vw;
+        margin-top: 18vh;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    /* My account nav buttons styling */
+    .myaccount-navs{
+        box-shadow: 3px 3px 3px 3px rgb(230, 228, 228);
+        width: 25vw;
+        height: 65vh;
+        padding: 10px;
+        background-color: white;
+        text-align: center;
+        overflow-y: auto;
+        scrollbar-width: 0;
+    }
+    
+    .myaccount-navs::-webkit-scrollbar{
+        color: black;
+        width: 0;
+    }
+    .myaccount a{
+        text-decoration: none;
+        color: black;
+        background-color: white;
+    }
+    .myaccount-navs a, h4, button{
+        width: 100%;
+        height: 6vh;
+        margin: 1vh auto;
+        background-color: white;
+        border: 0px;
+        font-family: 'Poppins', sans-serif;
+        font-size: large;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }
+    .myaccount-navs h4{
+        color: grey;
+        border-bottom: 1px solid grey;
+    }
+    .myaccount button:hover, a:hover{
+        background-color: rgb(244, 244, 251);
+        color: grey;
+        cursor: pointer;
+    }
+
+    .myaccount-detail{
+        width: 60vw;
+        height: 65vh;
+        box-shadow: 3px 3px 3px 3px rgb(230, 228, 228);
+        padding: 5px;
+        background-color: white;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 2vh 2vw;
+        font-family: 'Poppins', sans-serif;
+    }
+    .myaccount-detail::-webkit-scrollbar{
+        color: black;
+    }
+
+    /* Styling the myaccount details */
+    .myaccount-detail h2{
+        border-top: 1px solid grey;
+        padding-top: 5vh;
+        margin-top: 5vh;
+    }
+    .myaccount-detail .personal-info{
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
+    .myaccount-detail input[type="text"], input[type="email"]{
+        width: 20vw;
+        height: 4vh;
+        border-radius: 5px;
+        border: 1px solid grey;
+        padding: 5px 10px;
+        font-size: medium;
+        font-family: 'Poppins', sans-serif;
+    }
+    .myaccount-detail input[type="text" i]:focus{
+        border: 1px solid black;
+    }
+    .myaccount-detail select{
+        width: 15vw;
+        height: 5vh;
+        border-radius: 5px;
+        border: 1px solid grey;
+        padding: 5px 10px;
+        font-size: medium;
+        font-family: 'Poppins', sans-serif;
+    }
+    .pancard_img{
+        width: 20vw;
+        height: 15vh;
+        border-radius: 5px;
+        margin: 1vh 1vw;
+    }
+    .save-info-btn{
+        width: 8vw;
+        height: 5vh;
+        border: 1px solid grey;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0;        
+    }
+    .save-info-btn:hover{
+        border: 0;
+    }
+    .saved-upi{
+        padding-bottom: 1vh;
+        margin-bottom: 1vh;
+        border-bottom: 1px solid grey;
+    }
+
+{% endblock css %}
+
+{% block body %}
+    <div class="myaccount">
+        
+        <div class="myaccount-navs">
+            <!-- Account settings -->
+            <h4 class="account-set">ACCOUNT SETTINGS -></h4>
+            
+            <a class="pers-info" href="#personal-info">Personal information</a>
+            <a class="manage-add" href="#manage-add">Manage addresses</a>
+            <a class="pancard-info" href="#pancard-info">Pancard information</a>
+            
+            <!-- Payments -->
+            <h4 class="payments">PAYMENTS -></h4>
+            <a class="pay-meth" href="#payment-method">Payment methods</a>
+            <a class="saved-upi" href="#saved-upi">Saved UPI</a>
+
+            <!-- User Orders -->
+            <h4 class="orders">Orders -></h4>
+            <a href="{% url 'myorders' %}" class="user-order">My Orders</a>
+            
+            <!-- Logout -->
+            <form action="{% url 'userLogout' %}" class="logout-form">{% csrf_token %}
+                <button class="logout">LOGOUT</button>
+            </form>
+            
+        </div>
+
+        <div class="myaccount-detail">
+            <form action="{% url 'saveUserProfile' %}" method="post" class="save-info">{% csrf_token %}
+
+                {% comment %} if the user has already made his profile then we will display this {% endcomment %}
+                {% if user_profile_saved %}
+
+                                    
+                    <!-- USER'S PERSONAL INFORMATION -->
+                    <h2 class="personal-info" id="personal-info">Personal Information</h2>
+                    <!-- user's name -->
+                    <h3 class="name">Name</h3>
+                    <input type="text" name="name-input" value="{{ user.user_name }}" class="name-input" placeholder="full name" required>
+                
+                    <!-- user's gender -->
+                    <h3 class="gender">Gender</h3>
+                    
+                    <!-- if the user's gender is male then we will display male  -->
+                    {% if user.user_gender == "male" %}
+                    <select name="gender-input" class="gender-input">
+                        <option value="male" selected class="male">Male</option>
+                        <option value="female" class="female">Female</option>
+                    </select>
+                    <!-- else female  -->
+                    {% else %}
+                    <select name="gender-input" class="gender-input">
+                        <option value="male" class="male">Male</option>
+                        <option value="female" selected class="female">Female</option>
+                    </select>
+                    {% endif %}
+
+                    <!-- user's email address -->
+                    <h3 class="email">Email address</h3>
+                    <input type="email" name="email-input" value="{{ user.user_email }}" required placeholder="sample@gmail.com" class="email-input">
+
+                    <!-- user's mobile number -->
+                    <h3 class="mob">Mobile Number</h3>
+                    <input type="text" name="mob-input" value="{{ user.user_mob }}" required placeholder="mobile no." class="mob-input">
+
+
+                    <!-- MANAGE ADDRESSES -->
+                    <!-- user's delivery address -->
+                    <h2 class="manage-add" id="manage-add">Manage Addresses</h2>
+                    <h3 class="delivery">Deliver to </h3>
+                    <input type="text" name="delivery-input" value="{{ user.user_add }}" required placeholder="your complete address" class="delivery-input">
+
+                    <!-- PANCARD INFORMATION -->
+                    <h2 class="pancard-info" id="pancard-info">Pancard Information</h2>
+                
+                    <h3 class="pancard-no">Pancard Number :- {{ user.pan_no }}</h3>
+                
+                    <h3 class="panard-img">Upload pancard Image ( click a clear picture of your pancard and uplod it here. )</h3>
+                    <input type="file" accept="image/png, image/jpg" alt="pancard image" name="pancard-img-input" class="pancard-img-input">
+                    {% comment %} <img class="pancard_img" src="{{user.pan_img.url}}"> {% endcomment %}
+
+                    <!-- PAYMENTS -->
+                
+                    <!-- PAYMENT METHODS -->
+                    <h2 class="payment-method" id="payment-method">Payment Method</h2>
+                
+                    <!-- cash on delivery or credit/debit card or upi or wallet -->
+                    <h3 class="c_o_d">Type your default payment mode ( c_o_d / credit_or_debit cart / upi / wallet )</h3>
+                    
+                    <!-- if c_o_d is in database then we will show it as the default value in the profile  -->
+                    {% if user.payment_method == "c_o_d" %}
+                    <select name="payment-mode-input" class="payment-mode-input">
+                        <option value="c_o_d" selected>c_o_d</option>
+                        <option value="credit / debit card">credit / debit card</option>
+                        <option value="UPI">UPI</option>
+                        <option value="T-Mart Wallet">T-Mart Wallet</option>
+                    </select>
+                    {% endif %}
+                    
+                    <!-- if credit_or_debit_card is in database then we will show it as the default value in the profile  -->
+                    {% if user.payment_method == "credit / debit card" %}
+                    <select name="payment-mode-input" class="payment-mode-input">
+                        <option value="c_o_d" >c_o_d</option>
+                        <option value="credit / debit card" selected>credit / debit card</option>
+                        <option value="UPI">UPI</option>
+                        <option value="T-Mart Wallet">T-Mart Wallet</option>
+                    </select>
+                    {% endif %}
+
+                    <!-- if upi is in database then we will show it as the default value in the profile  -->
+                    {% if user.payment_method == "UPI" %}
+                    <select name="payment-mode-input" class="payment-mode-input">
+                        <option value="c_o_d" >c_o_d</option>
+                        <option value="credit / debit card">credit / debit card</option>
+                        <option value="UPI" selected>UPI</option>
+                        <option value="T-Mart Wallet">T-Mart Wallet</option>
+                    </select>
+                    {% endif %}
+
+                    <!-- if wallet is in database then we will show it as the default value in the profile  -->
+                    {% if user.payment_method == "T-Mart Wallet" %}
+                    <select name="payment-mode-input" class="payment-mode-input">
+                        <option value="c_o_d" >c_o_d</option>
+                        <option value="credit / debit card">credit / debit card</option>
+                        <option value="UPI">UPI</option>
+                        <option value="T-Mart Wallet default" selected>T-Mart Wallet</option>
+                    </select>
+                    {% endif %}
+
+                    <!-- SAVED UPI -->
+                    <h2 class="saved-upi" id="saved-upi">Saved UPI</h2>
+
+                    <!-- information changing button  -->
+                
+                    <button class="save-info-btn">Save</button>
+          
+                <!-- else if the user is new then we will display the profile input page. -->
+                {% else %}
+
+                    <!-- USER'S PERSONAL INFORMATION -->
+                    <h2 class="personal-info" id="personal-info">Personal Information</h2>
+                    <!-- user's name -->
+                    <h3 class="name">Name</h3>
+                    <input type="text" name="name-input" class="name-input" placeholder="full name" required>
+                
+                    <!-- user's gender -->
+                    <h3 class="gender">Gender</h3>
+                    
+                    <select name="gender-input" class="gender-input">
+                        <option value="male" class="male" selected>Male</option>
+                        <option value="female" class="female">Female</option>
+                    </select>
+
+                    <!-- user's email address -->
+                    <h3 class="email">Email address</h3>
+                    <input type="email" name="email-input" required placeholder="sample@gmail.com" class="email-input">
+
+                    <!-- user's mobile number -->
+                    <h3 class="mob">Mobile Number</h3>
+                    <input type="text" name="mob-input" required placeholder="mobile no." class="mob-input">
+
+
+                    <!-- MANAGE ADDRESSES -->
+                    <!-- user's delivery address -->
+                    <h2 class="manage-add" id="manage-add">Manage Addresses</h2>
+                    <h3 class="delivery">Deliver to </h3>
+                    <input type="text" name="delivery-input" required placeholder="your complete address" class="delivery-input">
+
+                    <!-- PANCARD INFORMATION -->
+                    <h2 class="pancard-info" id="pancard-info">Pancard Information</h2>
+                
+                    <h3 class="pancard-no">Pancard Number <h5>[ Note :- Once you've entered the pancard number, you can't change it, so enter it correctly. ]</h5></h3>
+                    <input type="text" name="pancard-no-input" placeholder="10-digit pancard no." class="pancard-no-input" required>
+                
+                    <h3 class="panard-img">Upload pancard Image ( click a clear picture of your pancard and uplod it here. )</h3>
+                    <input type="file" accept="image/png, image/jpg" alt="pancard image" name="pancard-img-input" class="pancard-img-input">
+                    
+
+                    <!-- PAYMENTS -->
+                
+                    <!-- PAYMENT METHODS -->
+                    <h2 class="payment-method" id="payment-method">Payment Method</h2>
+                
+                    <!-- cash on delivery or credit/debit card or upi or wallet -->
+                    <h3 class="c_o_d">Type your default payment mode ( c_o_d / credit_or_debit cart / upi / wallet )</h3>
+
+                    <select name="payment-mode-input" class="payment-mode-input">
+                        <option value="c_o_d" selected>c_o_d</option>
+                        <option value="credit / debit card">credit / debit card</option>
+                        <option value="UPI">UPI</option>
+                        <option value="T-Mart Wallet">T-Mart Wallet</option>
+                    </select>
+
+                    <!-- SAVED UPI -->
+
+                    <!-- information saving button  -->
+                    <button class="save-info-btn">Save</button>
+                {% endif %}
+
+            </form>
+
+        </div>
+    </div>
+{% endblock body %}

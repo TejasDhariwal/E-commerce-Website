@@ -1,0 +1,218 @@
+{% extends '01_base.html' %}
+
+{% block title %}T - Mart{% endblock title %}
+{% load static %}
+
+{% block css %}
+    /* main */
+
+    /* designing the introduction part */
+    .intro{
+        margin: 20vh 5vw 10vh 5vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .intro-text{margin-left: 2vw;}
+    .intro-img{
+        border-radius: 10px;
+        width: 40vw;
+        height: 50vh;
+    }
+    .intro-img:hover{
+        transform: scale(1.01);
+        transition: 0.1s ease-out;
+    }
+
+    /* Designing the main category part */
+    .main-category{margin: 10vh 2vw 10vh 2vw;}
+
+    .category-heading{
+        text-align: center;
+        margin-bottom: 8vh;
+    }
+
+    .product_category_container{
+        display: grid;
+        grid-template-columns: repeat(4, 21vw);
+        grid-column-gap: 2vw;
+        grid-row-gap: 2vh;
+    }
+
+    .category-options{
+        display: flex;
+        align-content: center;
+    }
+    .option2{margin-top: 5vh;}
+
+    .cat-link{
+        width: 22vw;
+        height: 25vh;
+        margin: 1vh 1vw 1vh 1vw;
+        display: inline-block;
+        position: relative;
+    }
+
+    .cat-img{
+        width: 22vw;
+        height: 25vh;
+        border-radius: 5px;
+    }
+    .cat-t{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color:rgb(43, 43, 43);
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+    }
+    .cat-text{
+        color: white;
+        font-size: larger;
+        font-style: italic;
+    }
+    .cat-t:hover{
+        opacity: 0.5;
+        transition: 0.5s all ease-out;
+    }
+
+    /* Designing the trending products section */
+    .trending-products{
+        margin: 2vh 2vw;
+        text-align: center;
+    }
+
+    .trending-products .main-heading{margin-bottom: 5vh;}
+
+    .trending-products .product-container{
+        margin: 2vh auto;
+        width: 90vw;
+        height: 70vh;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 2px 2px 2px 2px grey;
+        display: flex;
+        align-items: center;
+
+    }
+
+    .trending-products .heading{
+        text-align: left;
+        margin: 5vh 0 3vh 3vw;
+    }
+
+    .trending-products .product-container .product{
+        margin: auto 4vw;
+        width: 20vw;
+        height: 53vh;
+        position: relative;
+    }   
+
+    .trending-products .product-container .product .info{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .trending-products .product-container .product .btn{
+        width: 8vw;
+        height: 4vh;
+        margin-bottom: 5px;
+        background-color: white;
+        color: black;
+        border: 1px solid grey;
+        border-radius: 2px;
+        cursor: pointer;
+        font-family: 'Golos Text', sans-serif;
+        position: absolute;
+        left: 20%;
+        bottom: 0;
+    }
+
+    .trending-products .product-container .product .btn:hover{font-weight: bolder;}
+
+    .trending-products .product-container .more-product{
+        position: absolute;
+        top: 2px;
+        right: 4vw;
+        font-family: 'Golos Text', sans-serif;
+        cursor: pointer;
+        color: black;
+    }
+    .trending-products .product-container .more-product:hover{
+        font-weight: bolder;
+    }
+
+
+{% endblock css %}
+
+{% block body %}
+   
+    <!-- Main part or the body of the website -->
+    <div class="main">
+        
+        <!-- Introduction section -->
+        <div class="intro">
+            <div class="intro-img">
+                <img src="{% static 'intro.jpg' %}" alt="img" class="intro-img">
+            </div>
+            <div class="intro-text">
+                <h1 class="text1">Get the best deals here</h1>
+                <h1 class="text2">with maximum discount and least price</h1>
+            </div>
+        </div>
+
+        <!-- Main Categories -->
+        <div class="main-category">
+            <h1 class="category-heading">Shop by category</h1>
+
+            <div class="product_category_container">
+                {% for product_category in product_categories %}
+                    <div class="cate-opt">
+                        <a class="cat-link" href="{% url 'category_Products' product_category.category_name %}">
+                            <img src="{{product_category.category_image.url}}" alt="img" class="cat-img">
+                            <div class="cat-t">
+                                <h3 class="cat-text">{{product_category.category_name}}</h3>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Products for trending categories -->
+        <div class="trending-products">
+
+            <h1 class="main-heading">Trending Products</h1>
+
+            {% for products in allProds%}
+            
+            <h2 class="heading">{{products.0.product_category}}</h2>
+            <hr>
+            
+            <div class="product-container">
+                {% for product in products|slice:":4" %}
+                    <div class="product">
+                    <img src="{{product.product_image.url}}" alt="img" class="img" name="product-img"  width="200" height="230">
+                    <div class="info">
+                        <p class="name" name="product-name">{{product.product_name}}</p>
+                        <p class="price" name="product-price">{{product.product_price}} Rs</p>
+                    </div>
+                    <form method="post" action="{% url 'product_Details' product.id %}">{% csrf_token %}
+                        <button class="btn" name="product-btn">View Product</button>
+                    </form>
+                    </div>
+                {% endfor %}
+                <a href="{% url 'category_Products' products.0.product_category %}">
+                    <p class="more-product">View more -></p>
+                </a>
+            </div>
+            {% endfor%}
+        </div>
+    </div>
+{% endblock body %}

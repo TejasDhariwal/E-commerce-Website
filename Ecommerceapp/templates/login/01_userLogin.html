@@ -1,0 +1,83 @@
+{% extends '01_base.html' %}
+
+{% comment %} User login step1 page {% endcomment %}
+
+{% block title %}T - Mart | User Login{% endblock title %}
+
+{% block css %}
+    .userLogin{
+        animation: slide_page 0.5s;
+        margin: 12vh 2vw 5vh 2vw;
+        overflow: hidden;
+        height: 73vh;
+    }
+    .userLogin-heading{
+        border-bottom: 2px solid gray;
+        padding: 2vh 2vw;
+    }
+    .userLoginForm{
+        margin: 11vh 27vw;
+        width: 40vw;
+        height: 40vh;
+        text-align: center;
+        padding: 2vh;
+        box-shadow: 2px 2px 2px 2px gray;
+    }
+    .userLoginForm .user-name, .user-email{
+        width: 30vw;
+        height: 4vh;
+        border: 1px solid gray;
+        border-radius: 10px;
+        padding: 10px 10px;
+        font-size: larger;
+        text-align: center;
+        margin: 2vh auto;
+    }
+    .user-password{
+        width: 14vw;
+        height: 4vh;
+        border: 1px solid gray;
+        border-radius: 10px;
+        padding: 10px 10px;
+        font-size: larger;
+        text-align: center;
+        margin: 0 1vw;
+    }
+    .userLoginForm input:focus{
+        border: 1px solid black;
+    }
+    .submit{
+        width: 14vw;
+        height: 6vh;
+        border: 1px solid black;
+        border-radius: 10px;
+        background-color: white;
+        
+    }
+    .submit:hover{
+        font-weight: bolder;
+    }
+{% endblock css %}
+
+{% block body %}
+    <div class="userLogin">
+        <h2 class="userLogin-heading">T - Mart | User Login - Step 1</h2>
+
+
+        <!-- Here the user will login to the website. -->
+
+        <form action="{% url 'userLoginSubmit' %}" method="post" class="userLoginForm">{% csrf_token %}
+            <!-- username -->
+            <input type="text" name="user-name" class="user-name" placeholder="User Name" required>
+            
+            <!-- user's email address -->
+            <input type="email" name="user-email" class="user-email" placeholder="samle@gmail.com" required>
+
+            <!-- user's password -->
+            <input type="text" name="user-password" placeholder="password" class="user-password" required>
+
+            <!-- submit button  -->
+            <button class="submit">Submit</button>
+        </form>
+    </div>
+{% endblock body %} 

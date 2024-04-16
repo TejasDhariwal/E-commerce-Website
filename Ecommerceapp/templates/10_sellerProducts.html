@@ -1,0 +1,101 @@
+{% extends "01_base.html" %}
+
+{% block title %}T-Mart | Seller Products{% endblock title %}
+
+{% block css %}
+    /* general styling of entire page. */
+    .seller-pr{
+        margin: 10vh 2vw;
+        margin-top: 15vh;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+    h2, h3{
+        padding-bottom: 2px;
+        border-bottom: 1px solid grey;
+    }
+    .workwn{
+        width: 70vw;
+        padding: 10px;
+    }
+    .prod-nav{
+        width: 22vw;
+        padding: 5px;
+    }
+    .prod-nav h3 a{
+        text-decoration: none;
+        color: black;
+    }
+
+    /* styling the products of seller */
+    .track-pr{
+        width: 100%;
+        display: grid;
+        grid-template-columns: 20% 20% 20% 20%;
+        column-gap: 3vw;
+        row-gap: 7vh;
+    }
+    .product{
+        position: relative;
+        height: 55vh;
+    }
+    .product .info{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .product button{
+        width: 8vw;
+        height: 4vh;
+        margin-bottom: 5px;
+        background-color: white;
+        color: black;
+        border: 1px solid grey;
+        border-radius: 2px;
+        cursor: pointer;
+        font-family: 'Golos Text', sans-serif;
+        position: absolute;
+        left: 20%;
+        bottom: 0;
+    }
+{% endblock css %}
+
+{% block body %}
+    <div class="seller-pr">
+
+        <div class="workwn">
+            <!-- track progress section -->
+            <h2>Track your progress with T-Mart</h2>
+            <div class="track-pr" id="track-pr">
+
+                {% for product in seller_products %}
+                    
+                    <div class="product">
+                        <img src="{{product.product_image.url}}" alt="img" class="img" name="product-img"  width="200" height="230">
+                    
+                        <div class="info">
+                            <p class="name" name="product-name">{{product.product_name}}</p>
+                            <p class="price" name="product-price">{{product.product_price}} Rs</p>
+                        </div>
+                    
+                        <form method="post" action="{% url 'seller_progress_Details' product.id %}">{% csrf_token %}
+                            <button class="btn" name="product-btn">View Progress</button>
+                        </form>
+                    </div>
+                    
+                {% endfor %}
+            </div>
+        
+            <!-- add products section -->
+            <div class="add-pr" id="add-pr">
+                <h2>Add products to increase your revenue.</h2>
+            </div>
+        </div>
+        
+        <div class="prod-nav">
+            <h3><a href="#track-pr">Track Progress</a></h3>
+            <h3><a href="#add-pr">Add Products</a></h3>
+        </div>
+    </div>
+    {% endblock body %}

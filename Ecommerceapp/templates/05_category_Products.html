@@ -1,0 +1,78 @@
+{% extends '01_base.html' %}
+
+{% block title %}T - Mart{% endblock title %}
+
+{% block css %}
+    .moreProducts{
+        margin: 10vh 2vw;
+    }
+    .heading{
+        margin-top: 15vh;
+    }
+
+    .products_container{
+        margin: 5vh 6vw;
+        display: grid;
+        grid-template-columns: repeat(4, 20vw);
+        grid-column-gap: 2vw;
+        grid-row-gap: 5vh;
+    }
+    
+    .product{
+        width: 18vw;
+        height: 60vh;
+        text-align: center;
+        position: relative;
+    }   
+
+    .product .info{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .product .info .product-price{
+        margin-left: 2vw;
+    }
+
+
+    .product .btn{
+        width: 8vw;
+        height: 4vh;
+        background-color: white;
+        color: black;
+        border: 1px solid grey;
+        border-radius: 2px;
+        cursor: pointer;
+        font-family: 'Golos Text', sans-serif;
+        position: absolute;
+        bottom: 0;
+        left: 25%;
+    }
+
+    .product .btn:hover{font-weight: bolder;}
+
+  
+{% endblock css %}
+
+{% block body %}
+    <div class="moreProducts">
+        <h2 class="heading">{{products.0.product_category}}</h2>
+        <hr>
+
+        <div class="products_container">
+            {% for product in products %}
+                <div class="product">
+                    <img src="{{product.product_image.url}}" alt="img" class="img" name="product-img"  width="230" height="260">
+                    <div class="info">
+                        <p class="name" name="product-name">{{product.product_name}}</p>
+                        <p class="price" name="product-price">{{product.product_price}} Rs</p>
+                    </div>
+                    <form action="{% url 'product_Details' product.id %}">{% csrf_token %}
+                        <button class="btn"  name="product-btn">View Product</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock body %}

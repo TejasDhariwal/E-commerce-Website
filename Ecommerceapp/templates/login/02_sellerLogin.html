@@ -1,0 +1,55 @@
+{% extends '01_base.html' %}
+
+{% block title %}E-commerce Site | Seller Login{% endblock title %}
+
+{% block css %}
+
+.seller-login h3{
+    margin: 0 5vw;
+    margin-top: 15vh;
+    border-bottom: 1px solid black;
+    padding-bottom: 2vh;
+}
+
+.seller-login form{
+    width: 30vw;
+    height: 53vh;
+    border: 2px solid gray;
+    border-radius: 5px;
+    margin: 5vh auto;
+    align-items: center;
+}
+
+.seller-login form input, button{
+    display: block;
+    width: 70%;
+    height: 5vh;
+    margin: 4vh auto;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
+.seller-login form button{
+    width: 30%;
+    background-color: white;
+    
+}
+
+{% endblock css %}
+
+{% block body %}
+    <!-- seller login page -->
+    <div class="seller-login">
+        <h3>Kindly fill out the following details to register yourself as a seller on T-Mart</h3>
+
+        <form action="{% url "sellerLoginSubmit" %}" method="post" class="seller-login-form"> {% csrf_token %}
+            <input type="text" name="seller-name" placeholder="Enter your name" class="seller-name">
+            <input type="email" name="seller-email" placeholder="Email ID" class="seller-email">
+            <input type="text" name="seller-password" placeholder="password" class="seller-password">
+            <button class="submit">Submit</button>
+        </form>
+    </div>
+
+
+{% endblock body %}

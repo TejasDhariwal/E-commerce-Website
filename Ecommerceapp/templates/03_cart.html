@@ -1,0 +1,104 @@
+{% extends '01_base.html' %}
+
+{% comment %} On this page user will be able to see all the products added in the cart {% endcomment %}
+
+{% block title %}T - Mart | Your Cart{% endblock title %}
+
+{% block css %}
+    .cart_heading{
+        margin: 15vh 2vw 10vh 2vw;
+        padding: 2vh 2vw;
+        border-bottom: 1px solid gray;
+    }
+    .cart_products{
+        margin: 2vh 2vw 20vh 2vw;
+        display: grid;
+        grid-template-columns: repeat(4, 22vw);
+        grid-row-gap: 5vh;
+        grid-column-gap: 2vw;
+    }
+    .cart_product{
+        width: 20vw;
+        height: 55vh;
+        padding: 1vh 1vw;
+        position: relative;
+    }
+    .cart_product_img{
+        width: 19vw;
+        height: 40vh;
+    }
+    .cart_product_img:hover{
+        transform: scale(1.1);
+        transition: 0.1s ease-out;
+    }
+    .cart_product_info{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .cart_product_price{margin-left: 1vw;}
+
+    .cart_product_btns{
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        position: absolute;
+        bottom: 0;
+    }
+
+    .cart_product_btns button{
+        background-color: white;
+        width: 8vw;
+        height: 4vh;
+        border: 1px solid grey;
+        border-radius: 5px;
+        margin: 0 1vw;
+        
+    }
+    .cart_product_btns button:hover{
+        font-weight: bolder;
+    }
+    .no_products{
+        width: 100%;
+        height: 53vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .no_products_info{
+        box-shadow: 2px 2px, -2px -2px grey;
+        border-radius: 5px;
+        padding: 10px;
+    }
+{% endblock css %}
+
+{% block body %}
+    <h1 class="cart_heading">Your Cart</h1>
+    {% comment %} if products are not there in the cart, then we will show the message that there are no products. {% endcomment %}
+    {% if no_products %}
+        <div class="no_products">
+            <h2 class="no_products_info">You have no products in the cart yet.</h2>
+        </div>
+    {% comment %} else we will display the products. {% endcomment %}
+    {% else %}
+    <div class="cart_products">
+        {% for product in products %}
+            <div class="cart_product">
+                <img src="{{ product.product_image.url }}" alt="img" class="cart_product_img">
+                <div class="cart_product_info">
+                    <p class="cart_product_name">{{ product.product_name }}</p>
+                    <p class="cart_product_price">{{ product.product_price }} Rs</p>
+                </div>
+                <div class="cart_product_btns">
+                    <form class="cart_product_view_form" method="post" action="{% url 'cart_product_detail' product.id %}">{% csrf_token %}
+                        <button class="cart_product_view_btn">View Product</button>
+                    </form>
+                    <form class="cart_product_remove_form" method="post" action="{% url 'remove_Product' product.id %}">{% csrf_token %}
+                        <button class="cart_product_remove_btn">Remove</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endblock body %}
