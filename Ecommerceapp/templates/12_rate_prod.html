@@ -1,0 +1,110 @@
+{% extends "01_base.html" %}
+
+{% block title %}T-Mart | Product Rating{% endblock title %}
+
+{% block css %}
+
+    .rate-product{
+        width: 60vw;
+        height: 70vh;
+        margin: 5vh 20vw;
+        margin-top: 15vh;
+        padding: 10px;
+        box-shadow: 2px 2px 2px 2px gray;
+        border-radius: 5px;
+    }
+    h2{
+        padding-bottom: 2px;
+        border-bottom: 1px solid grey;
+    }
+    .container{
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        overflow: hidden;
+        padding: 10px;
+    }
+    img{
+        padding: 5px;
+        border-right: 1px solid grey;
+    }
+
+    /* styling the rating section */
+    .star {
+        font-size: 25px;
+        cursor: pointer;
+      }
+      
+    .star:hover {
+        color: gold;
+      }
+      
+    .stars input{
+        display: none;
+    }   
+    /* submit button */
+    button{
+        width: 8vw;
+        height: 5vh;
+        background-color: white;
+        border: 1px solid grey;
+        border-radius: 5px;
+        margin: 5vh 2vw;
+    }
+    button:hover{
+        font-weight: bolder;
+        cursor: pointer;
+    }
+    
+
+{% endblock css %}
+
+{% block body %}
+
+    <div class="rate-product">
+        <h2>Kindly rate this product. It will help other users !</h2>
+        <div class="container">
+            <img src="{{product.product_image.url}}" alt="image" class="image" width="300" height="350">
+            <div class="info">
+                <form action="{% url 'product_rating' product.product_desc %}" method="post">{% csrf_token %}
+                    <h3 class="prod-name">{{ product.product_name }}</h3>
+                    
+                    <div class="stars">
+                        
+                        <input type="radio" id="rating1" name="rating1" value="1">
+                        <label for="rating1" class="fa solid fa-star star" onclick="rate('1')" id="star1"></label>
+                        
+                        <input type="radio" id="rating2" name="rating2" value="2">
+                        <label for="rating2" class="fa solid fa-star star" onclick="rate('2')" id="star2"></label>
+                        
+                        <input type="radio" id="rating3" name="rating3" value="3">
+                        <label for="rating3" class="fa solid fa-star star" onclick="rate('3')" id="star3"></label>
+                        
+                        <input type="radio" id="rating4" name="rating4" value="4">
+                        <label for="rating4" class="fa solid fa-star star" onclick="rate('4')" id="star4"></label>
+                        
+                        <input type="radio" id="rating5" name="rating5" value="5">
+                        <label for="rating5" class="fa solid fa-star star" onclick="rate('5')" id="star5"></label>
+
+                    </div>
+                
+                    <button type="submit">Submit</button>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/3c467e2d81.js" crossorigin="anonymous"></script>
+
+    <script>
+        const rate = (id)=>{
+            id = parseInt(id.replace("star", ""));
+            for (let i = 1; i <= id; i++) {
+                document.getElementById(`star${id}`).style.color = "gold";
+            }
+            
+        }
+    </script>
+
+{% endblock body %}
