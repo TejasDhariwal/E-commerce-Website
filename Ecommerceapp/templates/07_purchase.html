@@ -7,7 +7,7 @@
 {% block css %}
 
     /* designing the purchse product div  */
-    .purchase-product{
+    .purchase-product{j
         margin: 15vh 2vw 5vh 2vw;
         display: flex;
         align-items: center;
@@ -32,6 +32,7 @@
         overflow-x: hidden;
         overflow-y: auto;
         background-color: white;
+        margin-top: 10vh;
     }
 
     .purchase-steps::-webkit-scrollbar{opacity: 0;}
@@ -196,162 +197,162 @@
 
 {% block body %}
 
+<form action="{% url 'purchase_product' product.product_desc %}" class="purchase-prod-form" method="post">{% csrf_token %}
+
 <div class="purchase-product">
 
     <div class="purchase-steps">
-        <form action="{% url 'purchase_product' product.product_desc net_product_amount  %}" class="purchase-prod-form" method="post">{% csrf_token %}
             <!-- User Login -->
             <div class="purchase-step1 purchase-step">
-            <h3 class="login-heading">1. User Login</h3>
+                <h3 class="login-heading">1. User Login</h3>
 
-            {% if has_user_logged_in_made_profile %}
-                <!-- user name input -->
-                <div class="name">
-                    <h4 class="user-name">Name</h4>
-                    <input type="text" name="user-name-input" value="{{ user.user_name }}" class="user-name-input">
-                </div>
+                {% if has_user_logged_in_made_profile %}
+                    <!-- user name input -->
+                    <div class="name">
+                        <h4 class="user-name">Name</h4>
+                        <input type="text" name="user-name-input" value="{{ user.user_name }}" class="user-name-input">
+                    </div>
 
-                <!-- user phone input -->
-                <div class="phone">
-                    <h4 class="user-phone">Phone</h4>
-                    <input type="text" name="user-phone-input" value="{{ user.user_mob }}" class="user-phone-input">
-                </div>
+                    <!-- user phone input -->
+                    <div class="phone">
+                        <h4 class="user-phone">Phone</h4>
+                        <input type="text" name="user-phone-input" value="{{ user.user_mob }}" class="user-phone-input">
+                    </div>
 
-                <!-- logout button -->
-                <h4 class="logout"><a href="{% url 'userLogout' %}">Logout & Sign in to another account.</a></h4>
+                    <!-- logout button -->
+                    <h4 class="logout"><a href="{% url 'userLogout' %}">Logout & Sign in to another account.</a></h4>
 
-            {% else %}
-                
-                <div class="login-info">
-                    <!-- login done but profile not made -->
-                    {% if user_login_successful and not has_user_logged_in_made_profile %}
+                {% else %}
                     
-                    <h4>Kindly make your <a href="{% url 'createUserProfile' %}">T-Mart user profile</a> first in order to proceed.</h4>
-                    
-                    <!-- login and profile both not done -->
-                    {% else %}
+                    <div class="login-info">
+                        <!-- login done but profile not made -->
+                        {% if user_login_successful and not has_user_logged_in_made_profile %}
+                        
+                        <h4>Kindly make your <a href="{% url 'createUserProfile' %}">T-Mart user profile</a> first in order to proceed.</h4>
+                        
+                        <!-- login and profile both not done -->
+                        {% else %}
 
-                    <h4>Kindly first <a href="{% url 'userLogin' %}" class="login">login</a> and make user profile.</h4>
+                        <h4>Kindly first <a href="{% url 'userLogin' %}" class="login">login</a> and make user profile.</h4>
+                        
+                        {% endif %}
                     
-                    {% endif %}
-                
-                </div>
-            {% endif %}
+                    </div>
+                {% endif %}
 
             </div>
         
             <!-- Delivery Address -->
             <div class="purchase-step2 purchase-step">
-            <h3 class="add-heading">2. Delivery Address</h3>
+                <h3 class="add-heading">2. Delivery Address</h3>
 
-            <!-- user delivery address input -->
-            <div class="add">
-                <h4 class="user-add">Delivery to</h4>
-                <input type="text" name="user-add-input" value="{{ user.user_add }}" class="user-add-input">
-            </div>
+                <!-- user delivery address input -->
+                <div class="add">
+                    <h4 class="user-add">Delivery to</h4>
+                    <input type="text" name="user-add-input" value="{{ user.user_add }}" class="user-add-input">
+                </div>
             </div>
         
             <!-- Order Summary -->
             <div class="purchase-step3 purchase-step">
-            <h3 class="order-summary-heading">3. Order Summary</h3>
+                <h3 class="order-summary-heading">3. Order Summary</h3>
 
-            <div class="p">
-                <!-- Product image -->
-                <img src="{{ product.product_image.url }}" alt="product_img" class="prod-img">
-    
-                <!-- Product Info -->
-                <div class="product-info">
-                    <!-- Product name -->
-                    <h4 class="prod-name">{{ product.product_name }}</h4>
-                    
-                    <!-- Product price -->
-                    <h4 class="prod-price">Price : {{ product.product_price }}</h4>
+                <div class="p">
+                    <!-- Product image -->
+                    <img src="{{ product.product_image.url }}" alt="product_img" class="prod-img">
         
-                    <!-- Product quantity -->
-                    <div class="prod-qn">
-                        <h4 class="prod-quantity">Quantity : </h4>
-                        <select name="prod-quantity" class="prod-quantity">
-                            <option value="1" selected class="1">1</option>
-                            <option value="2"  class="2">2</option>
-                            <option value="3"  class="3">3</option>
-                            <option value="4"  class="4">4</option>
-                            <option value="5"  class="5">5</option>
-                            <option value="6"  class="6">6</option>
-                            <option value="7"  class="7">7</option>
-                            <option value="8"  class="8">8</option>
-                            <option value="9"  class="9">9</option>
-                            <option value="10"  class="10">10</option>
-                        </select>
+                    <!-- Product Info -->
+                    <div class="product-info">
+                        <!-- Product name -->
+                        <h4 class="prod-name">{{ product.product_name }}</h4>
+                        
+                        <!-- Product price -->
+                        <h4 class="prod-price">Price : {{ product.product_price }}</h4>
+            
+                        <!-- Product quantity -->
+                        <div class="prod-qn">
+                            <h4 class="prod-quantity">Quantity : </h4>
+                            <select name="prod-quantity" class="prod-quantity">
+                                <option value="1" selected class="1">1</option>
+                                <option value="2"  class="2">2</option>
+                                <option value="3"  class="3">3</option>
+                                <option value="4"  class="4">4</option>
+                                <option value="5"  class="5">5</option>
+                                <option value="6"  class="6">6</option>
+                                <option value="7"  class="7">7</option>
+                                <option value="8"  class="8">8</option>
+                                <option value="9"  class="9">9</option>
+                                <option value="10"  class="10">10</option>
+                            </select>
+                        </div>
+            
+                        <!-- Product delivery date and price -->
+                        {% if product.product_delivery_price == 0 %}
+                            <h4 class="delivery-date">Delivery by {{tmart_address}} | Free</h4>
+                        {% else %}    
+                            <h4 class="delivery-date">Delivery by {{tmart_address}} | {{ product.product_delivery_price }}</h4>
+                        {% endif %}
                     </div>
-        
-                    <!-- Product delivery date and price -->
-                    {% if product.product_delivery_price == 0 %}
-                        <h4 class="delivery-date">Delivery by {{tmart_address}} | Free</h4>
-                    {% else %}    
-                        <h4 class="delivery-date">Delivery by {{tmart_address}} | {{ product.product_delivery_price }}</h4>
-                    {% endif %}
                 </div>
-            </div>
             </div>
         
             <!-- Payment Options -->
             <div class="purchase-step4 purchase-step">
-            <h3 class="payment-opt-heading">4. Payment Options</h3>
+                <h3 class="payment-opt-heading">4. Payment Options</h3>
 
-            <!-- payment options input -->
+                <!-- payment options input -->
 
-            <!-- if c_o_d is in database then we will show it as the default value in the profile  -->
-            {% if user.payment_method == "c_o_d" %}
-            <select name="payment-mode-input" class="payment-mode-input">
-                <option value="c_o_d" selected>c_o_d</option>
-                <option value="credit / debit card">credit / debit card</option>
-                <option value="UPI">UPI</option>
-                <option value="T-Mart Wallet">T-Mart Wallet</option>
-            </select>
-            
-            <!-- if credit_or_debit_card is in database then we will show it as the default value in the profile  -->
-            {% elif user.payment_method == "credit / debit card" %}
-            <select name="payment-mode-input" class="payment-mode-input">
-                <option value="c_o_d" >c_o_d</option>
-                <option value="credit / debit card" selected>credit / debit card</option>
-                <option value="UPI">UPI</option>
-                <option value="T-Mart Wallet">T-Mart Wallet</option>
-            </select>
+                <!-- if c_o_d is in database then we will show it as the default value in the profile  -->
+                {% if user.payment_method == "c_o_d" %}
+                <select name="payment-mode-input" class="payment-mode-input">
+                    <option value="c_o_d" selected>c_o_d</option>
+                    <option value="credit / debit card">credit / debit card</option>
+                    <option value="UPI">UPI</option>
+                    <option value="T-Mart Wallet">T-Mart Wallet</option>
+                </select>
+                
+                <!-- if credit_or_debit_card is in database then we will show it as the default value in the profile  -->
+                {% elif user.payment_method == "credit / debit card" %}
+                <select name="payment-mode-input" class="payment-mode-input">
+                    <option value="c_o_d" >c_o_d</option>
+                    <option value="credit / debit card" selected>credit / debit card</option>
+                    <option value="UPI">UPI</option>
+                    <option value="T-Mart Wallet">T-Mart Wallet</option>
+                </select>
 
-            <!-- if upi is in database then we will show it as the default value in the profile  -->
-            {% elif user.payment_method == "UPI" %}
-            <select name="payment-mode-input" class="payment-mode-input">
-                <option value="c_o_d" >c_o_d</option>
-                <option value="credit / debit card">credit / debit card</option>
-                <option value="UPI" selected>UPI</option>
-                <option value="T-Mart Wallet">T-Mart Wallet</option>
-            </select>
+                <!-- if upi is in database then we will show it as the default value in the profile  -->
+                {% elif user.payment_method == "UPI" %}
+                <select name="payment-mode-input" class="payment-mode-input">
+                    <option value="c_o_d" >c_o_d</option>
+                    <option value="credit / debit card">credit / debit card</option>
+                    <option value="UPI" selected>UPI</option>
+                    <option value="T-Mart Wallet">T-Mart Wallet</option>
+                </select>
 
-            <!-- if wallet is in database then we will show it as the default value in the profile  -->
-            {% elif user.payment_method == "T-Mart Wallet" %}
-            <select name="payment-mode-input" class="payment-mode-input">
-                <option value="c_o_d" >c_o_d</option>
-                <option value="credit / debit card">credit / debit card</option>
-                <option value="UPI">UPI</option>
-                <option value="T-Mart Wallet default" selected>T-Mart Wallet</option>
-            </select>
-            
-            {% else %}
-            <select name="payment-mode-input" class="payment-mode-input">
-                <option value="c_o_d" selected>c_o_d</option>
-                <option value="credit / debit card">credit / debit card</option>
-                <option value="UPI">UPI</option>
-                <option value="T-Mart Wallet">T-Mart Wallet</option>
-            </select>
-            
-            {% endif %}
+                <!-- if wallet is in database then we will show it as the default value in the profile  -->
+                {% elif user.payment_method == "T-Mart Wallet" %}
+                <select name="payment-mode-input" class="payment-mode-input">
+                    <option value="c_o_d" >c_o_d</option>
+                    <option value="credit / debit card">credit / debit card</option>
+                    <option value="UPI">UPI</option>
+                    <option value="T-Mart Wallet default" selected>T-Mart Wallet</option>
+                </select>
+                
+                {% else %}
+                <select name="payment-mode-input" class="payment-mode-input">
+                    <option value="c_o_d" selected>c_o_d</option>
+                    <option value="credit / debit card">credit / debit card</option>
+                    <option value="UPI">UPI</option>
+                    <option value="T-Mart Wallet">T-Mart Wallet</option>
+                </select>
+                
+                {% endif %}
 
-            <!-- purchase product button -->
-            <button class="purchase-prod-btn">Purchase Product</button>
-            
+                <!-- purchase product button -->
+                <button class="purchase-prod-btn">Purchase Product</button>
+                
             </div>
             
-        </form>
     </div>
 
     <div class="price-details">
@@ -383,5 +384,7 @@
 
 
 </div>
+
+</form>
 
 {% endblock body %}

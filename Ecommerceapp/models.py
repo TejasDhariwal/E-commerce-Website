@@ -124,7 +124,7 @@ class Product(models.Model):
     
     product_image = models.ImageField(upload_to="images", default="") # image of the product
     
-    product_desc = models.CharField(max_length=500) # description of the product
+    product_desc = models.CharField(max_length=3000) # description of the product
     
     product_pub_date = models.DateField() # the date on which the product is being published on our website
     
@@ -139,6 +139,10 @@ class Product(models.Model):
     product_delivery_price = models.IntegerField(default=0) # price of the delivery of product
 
     seller_id = models.IntegerField(default=0) # unique T-mart id of the seller.
+
+    # product rating attributes
+    product_rating = models.IntegerField(default=3)
+    product_purchases = models.IntegerField(default=0)
 
 
     def __str__(self):
@@ -198,6 +202,11 @@ class UserCart(models.Model):
     ) # delivery info of the product
 
     product_delivery_price = models.IntegerField(default=0) # price of the delivery of product
+
+    
+    # product rating attributes
+    product_rating = models.IntegerField(default=3)
+    product_purchases = models.IntegerField(default=0)
 
 
     def __str__(self):

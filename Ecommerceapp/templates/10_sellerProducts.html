@@ -28,6 +28,7 @@
         color: black;
     }
 
+
     /* styling the products of seller */
     .track-pr{
         width: 100%;
@@ -59,6 +60,52 @@
         left: 20%;
         bottom: 0;
     }
+
+    /* add product section */
+
+    .add-pr-info{
+        width: 70vw;
+        height: 70vh;
+        overflow-y: scroll;
+        box-shadow: 3px 3px 3px 3px gray;
+        border-radius: 10px;
+        margin: 10px auto;
+        padding: 15px;
+    }
+    .add-pr-info::-webkit-scrollbar {
+        display: none; /* Hide the scrollbar */
+    }
+
+    .add-pr-info input{
+        width: 500px;
+        height: 25px;
+    }
+    .add-pr-info input[type="text"]{
+        padding: 5px;
+    }
+    .add-pr-info select{
+        width: 130px;
+        height: 25px;
+    }
+    .add-pr-info input, select, button{
+        border: 1px solid grey;
+        border-radius: 5px;
+        background-color: white;
+        font-family: 'Ubuntu', sans-serif;
+    }
+    .add-pr-info button{
+        display: block;
+        width: 200px;
+        height: 30px;
+        padding: 3px;
+        margin: 20px 0;
+    }
+    .add-pr-info button:hover{
+        font-weight: bold;
+        border-color: black;
+        cursor: pointer;
+    }
+    
 {% endblock css %}
 
 {% block body %}
@@ -75,7 +122,12 @@
                         <img src="{{product.product_image.url}}" alt="img" class="img" name="product-img"  width="200" height="230">
                     
                         <div class="info">
-                            <p class="name" name="product-name">{{product.product_name}}</p>
+                            {% if product.product_name|length > 20 %}
+                                <p class="name" name="product-name">{{product.product_name|slice:"0:19"}}...</p>
+                            {% else %}
+                                <p class="name" name="product-name">{{product.product_name}}</p>
+                            {% endif %}
+
                             <p class="price" name="product-price">{{product.product_price}} Rs</p>
                         </div>
                     
@@ -90,12 +142,67 @@
             <!-- add products section -->
             <div class="add-pr" id="add-pr">
                 <h2>Add products to increase your revenue.</h2>
+                
+                <form class="add-pr-info" method="post" enctype="multipart/form-data" action="{% url "addNewProduct" %}">{% csrf_token %}
+
+                    <!-- taking product info from the seller -->
+
+                    <h4>Category<h4>
+                    <select name="cats" id="">
+                        <option value="Clothing">Clothing</option>
+                        
+                        <option value="Electronics">Electronics</option>
+                        
+                        <option value="Food">Food</option>
+                        
+                        <option value="Fitness">Fitness</option>
+                        
+                        <option value="Gardening">gardening</option>
+                        
+                        <option value="Furniture">Furniture</option>
+                        
+                        <option value="Decoratives">Decoratives</option>
+                        
+                        <option value="Home Appliances">Home Appliance</option>
+                        
+                        <option value="Foot wear">Foot Wear</option>
+                        
+                        <option value="Health">Health</option>
+
+                        <option value="Toys">Toys</option>
+
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <h4>Name</h4>
+                    <input type="text" name="name">
+
+                    <h4>Image</h4>
+                    <input type="file" accept="image/png, image/jpg" alt="product image" name="img">
+
+                    <h4>Description</h4>
+                    <input type="text" name="desc">
+
+                    <h4>Price</h4>
+                    <input type="number" name="price">
+
+                    <h4>Delivery</h4>
+                    <select name="delivery" id="" name="del">
+                        <option value="free">Free</option>
+
+                        <option value="paid">Paid</option>
+                    </select>
+
+                    <h4>Delivery Price</h4>
+                    <input type="number" name="delPrice">
+
+
+                    <!-- submit button -->
+                    <button>Upload Product</button>
+
+                </form>
             </div>
         </div>
         
-        <div class="prod-nav">
-            <h3><a href="#track-pr">Track Progress</a></h3>
-            <h3><a href="#add-pr">Add Products</a></h3>
-        </div>
     </div>
     {% endblock body %}

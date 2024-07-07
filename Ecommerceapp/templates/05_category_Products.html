@@ -64,7 +64,11 @@
                 <div class="product">
                     <img src="{{product.product_image.url}}" alt="img" class="img" name="product-img"  width="230" height="260">
                     <div class="info">
-                        <p class="name" name="product-name">{{product.product_name}}</p>
+                        {% if product.product_name|length > 20 %}
+                            <p class="name" name="product-name">{{product.product_name|slice:"0:19"}}...</p>
+                        {% else %}
+                            <p class="name" name="product-name">{{product.product_name}}</p>
+                        {% endif %}
                         <p class="price" name="product-price">{{product.product_price}} Rs</p>
                     </div>
                     <form action="{% url 'product_Details' product.id %}">{% csrf_token %}

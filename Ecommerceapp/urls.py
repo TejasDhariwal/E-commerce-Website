@@ -35,14 +35,17 @@ urlpatterns = [
     
     # some other urls
     path('purchase/<str:product_desc>/<str:text>', views.purchase, name="purchase"),
-    path("purchase_product/<str:product_desc>/<int:net_product_amount>", views.purchase_product, name="purchase_product"),
+    path("purchase_product/<str:product_desc>/", views.purchase_product, name="purchase_product"),
+    path("product_rating/<str:product_desc>", views.product_rating, name="product_rating"),
     
     path('remove_Product/<str:id>', views.remove_Product, name='remove_Product'),
+    path('removeSellerProduct/<str:product_desc>', views.removeSellerProduct, name='removeSellerProduct'),
     
     path('cart_product_detail/<str:id>', views.cart_product_detail, name='cart_product_detail'),
     
     path('myaccount/', views.myaccount, name='myaccount'),
     path('myorders/', views.myorders, name="myorders"),
 
-    path('seller_progress_Details/<str:id>', views.seller_progress_Details, name="seller_progress_Details")
+    path('seller_progress_Details/<str:id>', views.seller_progress_Details, name="seller_progress_Details"),
+    path('addNewProduct/', views.addNewProduct, name="addNewProduct")
 ]

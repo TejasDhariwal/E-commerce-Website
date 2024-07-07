@@ -243,16 +243,58 @@ def seller_progress_Details(request, id):
 
     # fetching the product
     product = Product.objects.filter(id=id).first()
-
+    
     global user_login_successful, seller_login_successful, seller_profile_saved
+    
+    earnings = int(product.product_purchases) * int(product.product_price)
+
     context={
         'product':product,
         'user_login_successful':user_login_successful,
         'seller_login_successful':seller_login_successful,
-        'seller_profile_saved':seller_profile_saved
+        'seller_profile_saved':seller_profile_saved,
+        'earnings':earnings
     }
 
     return render(request, '11_sellerProgressDetail.html', context)
+
+def addNewProduct(request):
+    # this view function will allow the seller to add new products to the website.
+
+    # fetching the info
+    global seller_id
+
+    if request.method == "POST":
+
+        category = request.POST.get('cats', '')
+        name = request.POST.get('name', '')
+        desc = request.POST.get('desc', '')
+        price = request.POST.get('price', '')
+        delivery = request.POST.get('del', '')
+        delPrice = request.POST.get('delPrice', '')
+
+        if 'img' in request.FILES:
+            uploadedImage = request.FILES['img']
+
+
+    from datetime import date
+
+    # adding the product to the database
+    newProduct = Product(
+        product_category = category,
+        product_name = name,
+        product_image = uploadedImage,
+        product_desc = desc,
+        product_pub_date = date.today(),
+        product_price = price,
+        product_delivery = delivery,
+        product_delivery_price = delPrice,
+        seller_id = seller_id
+    )
+    newProduct.save()
+
+    messages.success(request, "Your product is added successfully.")
+    return redirect("sellerProducts")
 
 
 
@@ -572,7 +614,7 @@ def cart(request):
 
     # if there are products in the cart
     else:
-        context = {'products': products, 'user_login_successful':user_login_successful, 'no_products':False}
+        context = {'products': products, 'user_login_successful':user_login_successful, 'no_products':False, 'seller_login_successful':seller_login_successful, 'seller_profile_saved':seller_profile_saved}
     return render(request, '03_cart.html', context)
 
 def remove_Product(request, id):
@@ -623,6 +665,8 @@ def purchase(request, product_desc, text):
 
     # fetching the user info 
     userProfile = UserProfile.objects.filter(pan_no=userPancardNo).first()
+
+    net_product_amount = int(product.product_price)+int(product.product_delivery_price)+10
     
     context = {
         'product': product,
@@ -630,21 +674,23 @@ def purchase(request, product_desc, text):
         'seller_login_successful':seller_login_successful,
         'tmart_address':tmart_address,
         'user':userProfile,
-        'net_product_amount':int(product.product_price)+int(product.product_delivery_price)+10,
+        'net_product_amount':net_product_amount,
         'has_user_logged_in_made_profile':True if(user_login_successful and user_profile_saved) else False
     }
 
     return render(request, '07_purchase.html', context)
 
-def purchase_product(request, product_desc, net_product_amount):
+def purchase_product(request, product_desc):
     """ View function for final transaction of product. """
 
-    global are_orders_placed
+    global are_orders_placed, user_login_successful, seller_login_successful
 
     # fetching the info
     product = Product.objects.filter(product_desc=product_desc).first()
     product_delivery_Add = request.POST.get('user-add-input', '')
-    product_qn = request.POST.get('prod-quantity', '1')
+    product_qn = int(request.POST.get('prod-quantity', '1'))
+
+    net_product_amount = (product.product_price * product_qn) + product.product_delivery_price + 10
 
     new_order = UserOrder(
         product_name = product.product_name,
@@ -656,9 +702,42 @@ def purchase_product(request, product_desc, net_product_amount):
     new_order.save()
     are_orders_placed = True
 
-    messages.success(request, "Your order is placed. You'll get the delivery soon.") # -> giving message to the user.
-    return redirect('home')
+    # allowing the user to rate the product
+    context = {
+        'seller_login_successful':seller_login_successful,
+        'user_login_successful':user_login_successful,
+        'product':product
+    }
+    messages.success(request, "Your order is placed successfully. You will get the order soon.")
 
+    return render(request, "12_rate_prod.html", context)
+
+# rate product
+def product_rating(request, product_desc):
+    # this function will take the user product rating as input and store it in the database.
+    n = None
+    rating = []
+
+    # fetching the info
+
+    if request.method == "POST":
+        rating = [
+            request.POST.get('rating1'),
+            request.POST.get('rating2'),
+            request.POST.get('rating3'),
+            request.POST.get('rating4'),
+            request.POST.get('rating5')
+        ]
+        new_rate = max([int(n) for n in rating if n is not None])
+
+        # updating the rating of the product.
+        product = Product.objects.filter(product_desc = product_desc).first()
+        product.product_rating = new_rate
+        product.product_purchases += 1
+        product.save()
+
+    messages.success(request, "Thanks for your support.")
+    return redirect('home')
 
 # orders' history
 def myorders(request):
@@ -680,3 +759,24 @@ def myorders(request):
     }
 
     return render(request, '08_myorders.html', context)
+
+def removeSellerProduct(request, product_desc):
+    """ will allow the seller to remove his/her product from the webiste. """
+
+    global user_login_successful, seller_login_successful, seller_id
+
+    product = Product.objects.filter(product_desc = product_desc)
+    product.delete()
+
+    # fetching all the left out products.
+    seller_products = Product.objects.filter(seller_id = seller_id)
+
+    context = {
+        'user_login_successful':user_login_successful,
+        'seller_login_successful':seller_login_successful,
+        'seller_products':seller_products
+    }
+
+
+    messages.success(request, "The product is removed successfully.")
+    return render(request, "10_sellerProducts.html", context)

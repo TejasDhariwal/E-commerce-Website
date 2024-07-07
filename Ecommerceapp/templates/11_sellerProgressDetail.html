@@ -30,6 +30,10 @@
         padding-bottom: 2vh;
         border-bottom: 1px solid gray;
     }
+    .product_detail .product_info > div{
+        margin: 5px;
+        padding: 5px;
+    }
     .order_btns{
         margin-top: 5vh;
         display: flex;
@@ -69,8 +73,50 @@
                 {% endif %}
             </div>
 
+            <div class="product-rating">
+                <div class="rate">
+                    {% if product.product_rating == 1 %}
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa regular fa-star star"></span>
+                        <span class="fa regular fa-star star"></span>
+                        <span class="fa regular fa-star star"></span>
+                        <span class="fa-regular fa-star star"></span>
+                    
+                    {% elif product.product_rating == 2 %}
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa-regular fa-star star"></span>
+                        <span class="fa-regular fa-star star"></span>
+                        <span class="fa-regular fa-star star"></span>
+                    
+                    {% elif product.product_rating == 3 %}
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa-regular fa-star star"></span>
+                        <span class="fa-regular fa-star star"></span>
+                        
+                    {% elif product.product_rating == 4 %}
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa-regular fa-star star"></span>
+
+                    {% else %}
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                        <span class="fa solid fa-star star" style="color: gold;"></span>
+                    {% endif %}
+                </div>
+                <p class="purchases">{{product.product_purchases}} people purchased this product.</p>
+                <p class="earning">{{earnings}} Rs earned.</p>
+            </div>
+
             <div class="order_btns">
-                <form action="{% url 'add_to_cart' product.product_name product.product_desc %}" class="cart_form" method="post">{% csrf_token %}
+                <form action="{% url 'removeSellerProduct' product.product_desc %}" class="cart_form" method="post">{% csrf_token %}
                     <button class="cart_btn product_btn">Remove Product</button>
                 </form>
             </div>

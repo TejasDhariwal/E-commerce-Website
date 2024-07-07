@@ -28,6 +28,35 @@
             }
         }
 
+        /* drop down section of seller account nav section */
+        
+        .seller-account-drop-down-menu{
+            width: 170px;
+            height: 80px;
+            background-color: white;
+            position: absolute;
+            top: 40px;
+            border-radius: 5px;
+            overflow: hidden;
+            display: none;
+            padding: 10px;
+            box-shadow: 2px 2px 2px 2px rgb(168, 167, 167);
+        }
+        #track-pr{
+            width: 100%;
+            border-bottom: 1px solid black;
+            padding-bottom: 8px;
+        }
+
+        .seller-account-drop-down-menu p a:hover{
+            text-decoration: underline;
+        }
+
+        .seller-account:hover .seller-account-drop-down-menu{
+            display: block;
+        }
+        
+
         /* body */
         
         body {
@@ -107,24 +136,31 @@
     <!-- Navbar -->
     <div class="navbar">
 
-        <a href="/"><h2 class="nav-heading">T - Mart</h2></a>
+        <a href="/" style="margin: 0 48px;"><h2 class="nav-heading">T - Mart</h2></a>
         
         <input type="text" name="Search box" id="nav-search" , class="nav-search" placeholder="Search box">
         
         {% if user_login_successful %}
-            <a href="{% url 'myaccount' %}"><h4 class="my-account">My account</h4></a>
+            <a href="{% url 'myaccount' %}" style="margin: 0 80px;"><h4 class="my-account">My account</h4></a>
         
         {% else %}
-            <a href="{% url 'userLogin' %}"><h4 class="log-in">Log In</h4></a>
+            <a href="{% url 'userLogin' %}" style="margin: 0 80px;"><h4 class="log-in">Log In</h4></a>
         {% endif %}
         
         {% if seller_login_successful %}
-            <a href="{% url 'sellerAccount' %}"><h4 class="seller">Seller Account</h4></a>
+            <a href="{% url 'sellerAccount' %}"><h4 style="margin: 0; width: max-content;" class="seller seller-account">Seller Account <i class="fa-solid fa-caret-down"></i>
+                <div class="seller-account-drop-down-menu">
+                    <p><a href="{% url "sellerProducts" %}" id="track-pr">Track Progress</a></p>
+                    <p><a href="{% url "sellerProducts" %}">Add Products</a></p>
+                </div>
+            </h4>
+            </a>
         {% else %}
             <a href="{% url 'sellerIntro' %}"><h4 class="seller">Become a Seller</h4></a>
         {% endif %}
             
         <a href="{% url 'cart' %}"><i class="fa-solid fa-2x fa-cart-shopping"></i></a>
+
     </div>
 
     <!-- Displaying messages if they are present. -->
